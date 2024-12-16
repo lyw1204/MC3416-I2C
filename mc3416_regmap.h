@@ -1,4 +1,16 @@
 //Register Table
+
+#define DEV_STAT (0x05)
+
+#define INTR_CTRL (0x06)
+#define TILT_INT_EN (0U)
+#define FLIP_INT_EN (1U)
+#define ANYM_INT_EN (2U)
+#define SHAKE_INT_EN (3U)
+#define TILT_35_INT_EN (4U)
+#define AUTO_CLR_EN (6U)
+#define ACQ_INT_EN (7U)
+
 #define MODE (0x07) //Mode
 
 #define STATE_0 (0U)
@@ -73,6 +85,9 @@
 #define ZOFFL (0x25)
 #define ZOFFH (0x26)
 #define ZGAIN_8 (7U)
+#define MAX_OFFSET 8191
+#define MIN_OFFSET -8192
+#define OFFSET_MSB_MASK 0b01111111
 
 //Gains
 #define XGAIN (0x27)
@@ -118,7 +133,7 @@ enum mc3416_Range
     AFS_12G
 };
 
-enum mc3415_SamplingRate
+enum mc3416_SamplingRate
 {
     SR_128 = 0,
     SR_256,
@@ -128,5 +143,12 @@ enum mc3415_SamplingRate
     SR_1024,
     SR_RES3,
     SR_RES4
-}
+};
+
+enum mc3416_axes
+{
+    x = 0,
+    y,
+    z
+};
 
