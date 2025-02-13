@@ -1,7 +1,8 @@
 #ifndef MYI2C_H
 #define MYI2C_H
 
-#include <TinyWireM.h>  // Include the Wire library for I2C communication
+
+#include <Wire.h>  // Include the Wire library for I2C communication
 
 class Myi2c_interface {
 public:
@@ -21,4 +22,4 @@ public:
     uint8_t writeRegister(uint8_t addr, uint8_t reg, uint8_t val);
 };
 
-#endif // MYI2C_H
+#endif

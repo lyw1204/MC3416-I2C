@@ -2,42 +2,42 @@
 
 Myi2c_interface::Myi2c_interface()
 {
-
+  Wire.begin();
 }
 
 uint8_t Myi2c_interface::overWrite(uint8_t addr, uint8_t reg, uint8_t mask, uint8_t new_val){
   uint8_t buf_val = readRegister(addr, reg);
   buf_val &= ~mask; //Clear the masked bits
-  buf_val |= new_val;
-  return writeRegister(reg, buf_val);
+  buf_val |= (new_val & mask); //Set the masked bits to new_val
+  return writeRegister(addr, reg, buf_val);
 }
 
 uint8_t Myi2c_interface::readRegister(uint8_t addr, uint8_t reg){
-  TinyWireM.beginTransmission(addr);
-  TinyWireM.write(reg);
-  TinyWireM.endTransmission(false);
-  TinyWireM.requestFrom(addr, (uint8_t) 1);
+  Wire.beginTransmission(addr);
+  Wire.write(reg);
+  Wire.endTransmission(false);
+  Wire.requestFrom(addr, (uint8_t) 1);
 
-  return TinyWireM.read();
+  return Wire.read();
 }
 
 uint8_t Myi2c_interface::readBytes(uint8_t addr, uint8_t reg, uint8_t num_bytes, uint8_t *destination){
-  TinyWireM.beginTransmission(addr);
-  TinyWireM.write(reg);
-  uint8_t status = TinyWireM.endTransmission(false);
-  TinyWireM.requestFrom(addr, num_bytes);
+  Wire.beginTransmission(addr);
+  Wire.write(reg);
+  uint8_t status = Wire.endTransmission(false);
+  Wire.requestFrom(addr, num_bytes);
 
-  while(uint8_t i = 0; i< num_bytes; i++){
-    if (TinyWireM.available()){
-         destination[i] = TinyWireM.read();
+  for(uint8_t i = 0; i< num_bytes; i++){
+    if (Wire.available()){
+         destination[i] = Wire.read();
     }
   }
   return status;
 }
 
 uint8_t Myi2c_interface::writeRegister(uint8_t addr, uint8_t reg, uint8_t val){
-  TinyWireM.beginTransmission(addr);
-  TinyWireM.write(reg);
-  TinyWireM.write(val);
-  return TinyWireM.endTransmission();
+  Wire.beginTransmission(addr);
+  Wire.write(reg);
+  Wire.write(val);
+  return Wire.endTransmission();
 }

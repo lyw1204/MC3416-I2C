@@ -98,6 +98,10 @@
 #define TF_THRESH_LSB (0x40)
 #define TF_THRESH_MSB (0x41)
 #define TF_DB (0x42)
+#define THRESH_MSB_MASK 0b01111111
+#define MAX_THRESH 32767
+#define DEFAULT_THRESH 10000
+
 
 //AnyMotion Threshold
 #define AM_THRESH_LSB (0x43)
@@ -150,5 +154,18 @@ enum mc3416_axes
     x = 0,
     y,
     z
+};
+
+enum mc3416_OpState
+{
+    OPS_STANDBY = 0,
+    OPS_WAKE = 1
+};
+
+enum mc3416_ThreshType
+{
+    THRESH_TF = 0,
+    THRESH_ANYM,
+    THRESH_SHAKE
 };
 

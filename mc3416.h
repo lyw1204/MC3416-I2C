@@ -1,9 +1,9 @@
-#ifndef MC3416
-#define MC3416
+#ifndef MC3416_H
+#define MC3416_H
 
 #define __AVR_ATtiny24__
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 
 #include "mc3416_regmap.h"
@@ -29,7 +29,7 @@ struct sIntAxes
 #define STATUSSTRUCTURE
 struct sStatusFlags
 {
-    bool = false;
+    bool tilt = false;
     bool flip = false;
     bool anym = false;
     bool shake = false;
@@ -38,26 +38,43 @@ struct sStatusFlags
 };
 #endif
 
+
 class MC3416 : public Myi2c_interface
 {
     public:
         MC3416();
+        bool isFlipped();
+        bool isTilted();
+        void enable_tilt_flip(int threshold = DEFAULT_THRESH);
+        void standby();
+        void wake();
+        void readFlags();
+        void readRaw();
+        sIntAxes m_rawOut;
 
     private:
+        uint8_t _i2cAddress;
         mc3416_Range m_range;
         mc3416_SamplingRate m_sr;
-        sIntAxes m_rawOut;
         sStatusFlags m_status;
         sStatusFlags m_int_status;
         
         uint8_t readStatus();
-        void setRange(mc3416_Range range);
-        void setSamplingRate(mc3415_SamplingRate sr);
-        void setOffset(mc3416_axes axis, short offset);
-        uint8_t readStatus();
         uint8_t readIntStatus();
-        void readRaw();
 
-}
+        void setOpState(mc3416_OpState state);
+        void setInterruptEnable(uint8_t value);
+        void setMotionControl(uint8_t mode);
+
+        void setRange(mc3416_Range range);
+        void setSamplingRate(mc3416_SamplingRate sr);
+        void setOffset(
+            mc3416_axes axis, 
+            short offset
+            );
+        void setThreshold(mc3416_ThreshType type, unsigned int threshold);
+
+
+};
 
 #endif
